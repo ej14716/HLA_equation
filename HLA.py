@@ -34,11 +34,11 @@ def is_number(s):
  
 
 
-file1 = "HC064_BAPOCM10_OPT_NMR_20_dangle.txt"
+file1 = "test/HC064_BAPOCM10_OPT_NMR_20_dangle.txt"
 
-file2 = "HC064_BAPOCM10_OPT_NMR_20_atno.txt"
+file2 = "test/HC064_BAPOCM10_OPT_NMR_20_atno.txt"
 
-file3 = "HC064_BAPOCM10_OPT_NMR_20_conn.txt"
+file3 = "test/HC064_BAPOCM10_OPT_NMR_20_conn.txt"
 
 
 
@@ -72,13 +72,7 @@ atomic_number = []
 
 array_size = 0
 
-sub1 = []
 
-sub2 = []
-
-sub3 = []
-
-sub4 = []
 
 
 
@@ -303,12 +297,8 @@ ivalues_failed = []
 bond_angle1 = np.zeros((1, 2), dtype = np.float64)
 bond_angle2 = np.zeros((1, 2), dtype = np.float64)
 
-length = 0
-for i in range(array_size):
-	if dihedral_array[i][0] == 1:
-		length = length +1
-sub_array = np.zeros((length, 5), dtype = np.float64)
-dihedral_coupling_array = np.zeros((length, 2), dtype = np.float64)
+sub_array = np.zeros((array_size, 5), dtype = np.int64)
+dihedral_coupling_array = np.zeros((array_size, 2), dtype = np.float64)
 c = 0
 for i in range(array_size):
 	if dihedral_array[i][0] == 1:
@@ -319,45 +309,45 @@ Esub1B = []
 Esub2B = []
 Esub3B = []
 Esub4B = []
-electronegativity_Barray = np.zeros((length, 4), dtype = np.float64)
+electronegativity_Barray = np.zeros((array_size, 4), dtype = np.float64)
 
-electronegativity_Aarray = np.zeros((length, 4), dtype = np.float64)	
+electronegativity_Aarray = np.zeros((array_size, 4), dtype = np.float64)	
 
-A_array = np.zeros((length, 4), dtype = np.float64)
+A_array = np.zeros((array_size, 4), dtype = np.float64)
 
-B_array = np.zeros((length, 4), dtype = np.float64)		
+B_array = np.zeros((array_size, 4), dtype = np.float64)		
 
-C_array = np.zeros((length, 4), dtype = np.float64)
+C_array = np.zeros((array_size, 4), dtype = np.float64)
 
-D_array = np.zeros((length, 4), dtype = np.float64)
+D_array = np.zeros((array_size, 4), dtype = np.float64)
 
-E_array = np.zeros((length, 4), dtype = np.float64)
+E_array = np.zeros((array_size, 4), dtype = np.float64)
 
-F_array = np.zeros((length, 1), dtype = np.float64)
+F_array = np.zeros((array_size, 1), dtype = np.float64)
 
-cos_array = np.zeros((length, 1), dtype = np.float64)
+cos_array = np.zeros((array_size, 1), dtype = np.float64)
 
-cossqr_array = np.zeros((length, 1), dtype = np.float64)
+cossqr_array = np.zeros((array_size, 1), dtype = np.float64)
 
-Jvalues_array = np.zeros((length, 1), dtype = np.float64)
-Jvalues_array2 = np.zeros((length, 1), dtype = np.float64)
-HLA_array = np.zeros((length, 4), dtype = np.float64)		
+Jvalues_array = np.zeros((array_size, 1), dtype = np.float64)
+Jvalues_array2 = np.zeros((array_size, 1), dtype = np.float64)
+HLA_array = np.zeros((array_size, 4), dtype = np.float64)		
 
 #get atom labels for substituents and their relative orientations
-
 for i in range(array_size):		
-	
+	sub_array[i][4] = i	
 #only look at pathways  that are HCCH			
 	if dihedral_array[i][0] == 1:
-
+	
 		bonds_1 = np.transpose(np.nonzero(connectivity_array[dihedral_array[i][1]]))
+	
 		if not len(bonds_1) == 1:
 			print("Hconnectivity_error")
 			ivalues_failed.append(i)
 			continue
 				
 		#check H is connected to C
-	
+		
 		if bonds_1[0] == dihedral_array [i][2]:
 
 			connection1 = 1
@@ -429,19 +419,19 @@ for i in range(array_size):
 
 										if (abs(bond_angle1[b][1]) < 180):
 
-											sub3.append(bonds_3[x])
+											sub_array[i][2] = (bonds_3[x])
 
 										else:
 
-											sub4.append(bonds_3[x])
+											sub_array[i][3] = (bonds_3[x])
 		
 									if (bond_angle1[b][1]< 0):
 
 										if (abs(bond_angle1[b][1]) > 180) and (abs(bond_angle1[b][1]) < 360):
-											sub3.append(bonds_3[x])	
+											sub_array[i][2] = (bonds_3[x])	
 										else:
 	
-											sub4.append(bonds_3[x])
+											sub_array[i][3] = (bonds_3[x])
 								 
 					
 	
@@ -466,42 +456,36 @@ for i in range(array_size):
 
 								if abs(bond_angle2[c][1]) < 180:
 
-									sub1.append(bonds_2[j])
+									sub_array[i][0] = (bonds_2[j])
 									
 								else:
 
-									sub2.append(bonds_2[j])
+									sub_array[i][1] = (bonds_2[j])
 
 							if (bond_angle2[c][1] < 0):
 
 								if (abs(bond_angle2[c][1]) > 180) and (abs(bond_angle2[c][1]) < 360):
 
-									sub1.append(bonds_2[j])
+									sub_array[i][0] = (bonds_2[j])
 
 								else:
 
-									sub2.append(bonds_2[j])
+									sub_array[i][1] = (bonds_2[j])
 
+print(sub_array)
 					
-						
-#put the substituent labels into an array		
-
-	
  	
-		sub_array[a][0] = sub1[a]
-		sub_array[a][1] = sub2[a]
-		sub_array[a][2] = sub3[a]
-		sub_array[a][3] = sub4[a]
-		sub_array[a][4] = i
-		a += 1
+		
 
 
 #now need to get electronegativity values for these substituents and the beta substituents
 
-for a in range(length):
-
+for a in range(array_size):
+	if sub_array[a][0] == 0:
+		continue
 	bonds_4 = np.transpose(np.nonzero(connectivity_array[sub_array[a][0]]))
-	
+	if len(bonds_4) != 0:
+		continue
 	Esub1B_1 = 0
 
 	for z in range(len(bonds_4)):
@@ -515,9 +499,13 @@ for a in range(length):
 			#assign and sum their electronegativities
 
 			Esub1B_1 += electronegativity_array[atomic_number[bonds_4[z]]]
-
+	if sub_array[a][1] == 0:
+		continue
 	bonds_5 = np.transpose(np.nonzero(connectivity_array[sub_array[a][1]]))	
+	if len(bonds_5) != 4:
+		continue
 	Esub2B_1 = 0
+
 
 	for z in range(len(bonds_5)):
 
@@ -530,9 +518,11 @@ for a in range(length):
 			#assign and sum their electronegativities
 
 			Esub2B_1 += electronegativity_array[atomic_number[bonds_5[z]]]
-
+	if sub_array[a][2] == 0:
+		continue
 	bonds_6 = np.transpose(np.nonzero(connectivity_array[sub_array[a][2]]))	
-
+	if len(bonds_6) != 6:
+		continue
 	Esub3B_1 = 0
 
 	for z in range(len(bonds_6)):
@@ -546,9 +536,11 @@ for a in range(length):
 			#assign and sum their electronegativities
 
 			Esub3B_1 += electronegativity_array[atomic_number[bonds_6[z]]]					
-
+	if sub_array[a][3] == 1:
+		continue
 	bonds_7 = np.transpose(np.nonzero(connectivity_array[sub_array[a][3]]))	
-
+	if len(bonds_) != 4:
+		continue
 	Esub4B_1 = 0
 
 	for z in range(len(bonds_7)):
@@ -590,15 +582,15 @@ for a in range(length):
 	
 #electronegativity of the alpha substituents array 	
 
-for i in range(length):
+for i in range(array_size):
 
-	electronegativity_Aarray[i][0] = electronegativity_array[atomic_number[sub1[i]]]
+	electronegativity_Aarray[i][0] = electronegativity_array[atomic_number[sub_array[i][0]]]
 
-	electronegativity_Aarray[i][1] = electronegativity_array[atomic_number[sub2[i]]]
+	electronegativity_Aarray[i][1] = electronegativity_array[atomic_number[sub_array[i][1]]]
 
-	electronegativity_Aarray[i][2] = electronegativity_array[atomic_number[sub3[i]]]
+	electronegativity_Aarray[i][2] = electronegativity_array[atomic_number[sub_array[i][2]]]
 
-	electronegativity_Aarray[i][3] = electronegativity_array[atomic_number[sub4[i]]]
+	electronegativity_Aarray[i][3] = electronegativity_array[atomic_number[sub_array[i][3]]]
 				
 # x the sum of the electronegativity vales of the beta substituents by p7
 
@@ -615,7 +607,7 @@ B_array = electronegativity_Aarray - A_array
 #do stuff with the positive and negtive substituents
 
 
-for i in range(length):
+for i in range(array_size):
 
 	C_array[i][0] = np.radians(dihedral_array[sub_array[i][4]][5]) + (p6 * (np.absolute(B_array[i][0])))
 
@@ -634,7 +626,7 @@ D_array = p4 + (p5 * np.square(np.cos(C_array)))
 E_array = D_array * B_array
 
 	
-for k in range(length):
+for k in range(array_size):
 	sum = 0
 	for l in range(4):
 		sum = sum + E_array[k][l]
@@ -642,7 +634,7 @@ for k in range(length):
 #need to chck this is right..
 
 
-for i in range(length):
+for i in range(array_size):
 
 	cos_array[i][0]  = np.cos(np.radians(dihedral_coupling_array[i][1]))
 
@@ -654,7 +646,7 @@ Jvalues_array2 = np.add(Jvalues_array, F_array)
 
 
 
-for i in range(length):
+for i in range(array_size):
 
 	HLA_array[i][0] = dihedral_coupling_array[i][0]
 
@@ -665,7 +657,7 @@ for i in range(length):
 	HLA_array[i][3] = Jvalues_array2[i]
 
 
-print(HLA_array) 
+
 outfile = "HLA.txt"
 
 
