@@ -40,6 +40,7 @@ file2 = "test/HC064_BAPOCM10_OPT_NMR_20_atno.txt"
 
 file3 = "test/HC064_BAPOCM10_OPT_NMR_20_conn.txt"
 
+file4 = "test/BAPOCM10_J_Raw.txt"
 
 
 p1 = 13.70
@@ -226,8 +227,7 @@ with open(file2, "r") as f:
 		atomic_number.append(int(items[0]))
 
 
-
-connectivity_array = np.zeros((442, 49), dtype = np.float64)	
+connectivityx = []	
 
 
 
@@ -242,22 +242,36 @@ with open(file3, "r") as f:
 	for line in f:
 
 		items = line.split(",")
+		connectivityx.append(items)
+
+
+connectivity_array = np.zeros((len(connectivityx), len(connectivityx[0])), dtype=np.float64)
+
+y=0
+x=0
+for line in connectivityx:
+	y = 0
+	for item in line:
+		if not is_number(item):
+			continue
+		connectivity_array[x][y] = item 
+		y += 1
+	x += 1
+
+DFTJ = []
 	
+x = 0
+y = 0
+with open(file4, "r") as f:
 
-		for item in items:
+	for line in f:
 
-			if not is_number(item):
-				continue
-			connectivity_array[x][y] = item
+		items = line.split(",")
+		DFTJ.append(items)
 
-			y += 1
-
-		x += 1
-
-		y = 0
-
-
-
+	
+DFTJ_array = np.zeros((len(DFTJ), len(DFTJ[0])), dtype=np.float)
+		
 		
 
 		
@@ -280,6 +294,7 @@ for i in range(array_size):
 
 	dihedral_array[i][5] = dihedral_angle1[i]
  	dihedral_array[i][6] = i
+	dihedral_array[i][7] = DFTJ_array[dihedral_array[i][1]][dihedral_array[i][4]]
 
 	
 	if atomic_number[atom_1[i]] == 1:
@@ -324,7 +339,7 @@ cossqr_array = np.zeros((array_size, 1), dtype = np.float64)
 
 Jvalues_array = np.zeros((array_size, 1), dtype = np.float64)
 Jvalues_array2 = np.zeros((array_size, 1), dtype = np.float64)
-HLA_array = np.zeros((array_size, 4), dtype = np.float64)		
+HLA_array = np.zeros((array_size, 5), dtype = np.float64)		
 
 #get atom labels for substituents and their relative orientations
 for i in range(array_size):		
@@ -638,7 +653,8 @@ for i in range(array_size):
 	HLA_array[i][2] = F_array[i]
 
 	HLA_array[i][3] = Jvalues_array2[i]
-
+	
+	HLA_array[i][4] = dihedral_array[i][7]
 
 
 outfile = "HLA.txt"
@@ -648,7 +664,7 @@ outfile = "HLA.txt"
 with open(outfile, "w") as f:
 
 	for i in range(array_size):
-		string = "{0:<16.6f}, {1:<16.6f}, {2:<16.6f}, {3:<16.6f}, ".format(HLA_array[i][0], HLA_array[i][1], HLA_array[i][2], HLA_array[i][3] )
+		string = "{0:<16.6f}, {1:<16.6f}, {2:<16.6f}, {3:<16.6f}, {4:<16.6f}, ".format(HLA_array[i][0], HLA_array[i][1], HLA_array[i][2], HLA_array[i][3], HLA_array[i][4] )
 
 		print(string, file = f)
 
