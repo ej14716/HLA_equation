@@ -664,8 +664,23 @@ outfile = "HLA.txt"
 
 with open(outfile, "w") as f:
 
-	for i in range(array_size):
-
-		string = "{0:<16.6f}".format(HLA_array)
+	for i in range(length):
+		string = "{0:<16.6f}, {1:<16.6f}, {2:<16.6f}, {3:<16.6f}, ".format(HLA_array[i][0], HLA_array[i][1], HLA_array[i][2], HLA_array[i][3] )
 
 		print(string, file = f)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#
