@@ -13,7 +13,7 @@ import numpy as np
 
 import sys
 
-np.set_printoptions(threshold = 3000) 
+np.set_printoptions(threshold = 5000) 
  
 def is_number(s):
     try:
@@ -230,11 +230,6 @@ with open(file2, "r") as f:
 connectivityx = []	
 
 
-
-x = 0
-
-y = 0
-
 	
 
 with open(file3, "r") as f:
@@ -260,23 +255,29 @@ for line in connectivityx:
 
 DFTJ = []
 	
-x = 0
-y = 0
 with open(file4, "r") as f:
 
 	for line in f:
 
 		items = line.split(",")
 		DFTJ.append(items)
+y = 0
+
+x = 0
+
+DFTJ_array = np.zeros((len(DFTJ), len(DFTJ[0])), dtype=np.float)
+
+for line in DFTJ:
+	y = 0
+	for item in line:
+		if not is_number(item):
+			continue
+		DFTJ_array[x][y] = item
+		y += 1
+	x += 1
 
 	
-DFTJ_array = np.zeros((len(DFTJ), len(DFTJ[0])), dtype=np.float)
-		
-		
-
-		
-
-dihedral_array = np.zeros((array_size, 7), dtype = np.float64)
+dihedral_array = np.zeros((array_size, 8), dtype = np.float64)
 
 		
 
@@ -294,8 +295,17 @@ for i in range(array_size):
 
 	dihedral_array[i][5] = dihedral_angle1[i]
  	dihedral_array[i][6] = i
-	dihedral_array[i][7] = DFTJ_array[dihedral_array[i][1]][dihedral_array[i][4]]
+	
+	if atom_1[i] > atom_4[i]:
+		low = atom_4[i]
+		high = atom_1[i]
+	else:
+		low = atom_1[i]
+		high = atom_4[i]
 
+
+	dihedral_array[i][7] = DFTJ_array[int(high)][int(low)]	
+	
 	
 	if atomic_number[atom_1[i]] == 1:
 		
@@ -306,7 +316,7 @@ for i in range(array_size):
 				if atomic_number[atom_4[i]] == 1:
 					
 					dihedral_array[i][0] = 1
-	
+
 a = 0
 ivalues_failed = []
 bond_angle1 = np.zeros((1, 2), dtype = np.float64)
@@ -657,14 +667,35 @@ for i in range(array_size):
 	HLA_array[i][4] = dihedral_array[i][7]
 
 
+
+length = 0
+for i in range(array_size):
+	if dihedral_array[i][0] == 1:
+		length += 1
+
+HLA_final = np.zeros((length, 8), dtype=np.float64)
+
+a = 0
+for i in range(array_size):
+	if dihedral_array[i][0] == 1:
+		HLA_final[a][0] = dihedral_array[i][0]
+		HLA_final[a][1] = dihedral_array[i][1]
+		HLA_final[a][2] = dihedral_array[i][2]
+		HLA_final[a][3] = dihedral_array[i][3]
+		HLA_final[a][4] = dihedral_array[i][4]
+		HLA_final[a][5] = dihedral_array[i][5]
+		HLA_final[a][6] = Jvalues_array2[i]
+		HLA_final[a][7] = dihedral_array[i][7]
+		a +=1	
+	
 outfile = "HLA.txt"
 
 
 
 with open(outfile, "w") as f:
 
-	for i in range(array_size):
-		string = "{0:<16.6f}, {1:<16.6f}, {2:<16.6f}, {3:<16.6f}, {4:<16.6f}, ".format(HLA_array[i][0], HLA_array[i][1], HLA_array[i][2], HLA_array[i][3], HLA_array[i][4] )
+	for i in range(length):
+		string = "{0:<16.6f}, {1:<16.6f}, {2:<16.6f}, {3:<16.6f}, {4:<16.6f}, {5:<16.6f}, {6:<16.6f}, {7:<16.6f}, ".format(HLA_final[i][0], HLA_final[i][1], HLA_final[i][2], HLA_final[i][3], HLA_final[i][4],  HLA_final[i][5],  HLA_final[i][6],  HLA_final[i][7])
 
 		print(string, file = f)
 
