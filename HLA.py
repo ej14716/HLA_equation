@@ -33,8 +33,9 @@ def is_number(s):
 
  
 
+molname = sys.argv[1]
 
-file1 = "test/HC064_BAPOCM10_OPT_NMR_20_dangle.txt"
+file1 = "test/HC064_" + molname + "_OPT_NMR_20_dangle.txt"
 
 file2 = "test/HC064_BAPOCM10_OPT_NMR_20_atno.txt"
 
@@ -690,7 +691,7 @@ for i in range(array_size):
 	
 outfile = "HLA.txt"
 
-
+new_outfile = molname + "_HLA.out"
 
 with open(outfile, "w") as f:
 
