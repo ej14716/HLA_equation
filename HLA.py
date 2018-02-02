@@ -34,6 +34,7 @@ def is_number(s):
     return False
 
 
+<<<<<<< HEAD
 raw_names = glob.glob(test/*_J_Raw.txt)
 names = []
 for items in raw_names:
@@ -46,6 +47,11 @@ for name in names:
 	file3 = "test/HC064" + name + "OPT_NMR_20_conn.txt"
 	file4 = "test/" + name + "_J_Raw.txt"
 
+=======
+molname = sys.argv[1]
+
+file1 = "test/HC064_" + molname + "_OPT_NMR_20_dangle.txt"
+>>>>>>> aec53218eba3761a42428854619c209884370743
 
 file2 = "test/HC064_BAPOCM10_OPT_NMR_20_atno.txt"
 
@@ -701,7 +707,7 @@ for i in range(array_size):
 	
 outfile = "HLA.txt"
 
-
+new_outfile = molname + "_HLA.out"
 
 with open(outfile, "w") as f:
 
