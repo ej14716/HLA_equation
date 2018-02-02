@@ -13,6 +13,8 @@ import numpy as np
 
 import sys
 
+import glob
+
 np.set_printoptions(threshold = 5000) 
  
 def is_number(s):
@@ -31,10 +33,19 @@ def is_number(s):
  
     return False
 
- 
 
+raw_names = glob.glob(test/*_J_Raw.txt)
+names = []
+for items in raw_names:
+	item = items.split('_')
+	names.append(item[0])) 
 
-file1 = "test/HC064_BAPOCM10_OPT_NMR_20_dangle.txt"
+for name in names:
+	file1 = "test/HC064" + name + "OPT_NMR_20_dangle.txt"
+	file2 = "test/HC064" + name + "OPT_NMR_20_atno.txt"
+	file3 = "test/HC064" + name + "OPT_NMR_20_conn.txt"
+	file4 = "test/" + name + "_J_Raw.txt"
+
 
 file2 = "test/HC064_BAPOCM10_OPT_NMR_20_atno.txt"
 
