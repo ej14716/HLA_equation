@@ -33,17 +33,28 @@ def is_number(s):
 
     return False
 
-raw_names = glob.glob(test/*_J_Raw.txt)
+raw_names = glob.glob("J_matrix/*_J_Raw.txt")
 names = []
 for items in raw_names:
-	item = items.split('_')
-	names.append(item[0]))
+	item = items.split('/')
+	it = item[1].split('_')
+	names.append(it[0])
+
 
 for name in names:
-	file1 = "test/HC064" + name + "OPT_NMR_20_dangle.txt"
-	file2 = "test/HC064" + name + "OPT_NMR_20_atno.txt"
-	file3 = "test/HC064" + name + "OPT_NMR_20_conn.txt"
-	file4 = "test/" + name + "_J_Raw.txt"
+    string1 = "pass/*" + name + "*dangle.txt"
+    file1 = glob.glob(string1)
+    file1 = file1[0]
+    string2 = "pass/*" + name + "*atno.txt"
+    file2 = glob.glob(string2)
+    file2 = file2[0]
+    string3 = "pass/*" + name + "*conn.txt"
+    file3 = glob.glob(string3)
+    file3 = file3[0]
+    string4 = "J_matrix/" + name + "_J_Raw.txt"
+    file4 = glob.glob(string4)
+    file4 = file4[0]
+
 
     p1 = 13.70
 
@@ -267,8 +278,8 @@ for name in names:
 
     x = 0
 
-    DFTJ_array = np.zeros((len(DFTJ), len(DFTJ[0])), dtype=np.float)
-
+    DFTJ_array = np.zeros((len(DFTJ), len(DFTJ)), dtype=np.float64)
+    
     for line in DFTJ:
     	y = 0
     	for item in line:
@@ -316,8 +327,10 @@ for name in names:
     			if atomic_number[atom_3[i]] == 6:
 
     				if atomic_number[atom_4[i]] == 1:
-
-    					dihedral_array[i][0] = 1
+				
+					if atom_4[i] < atom_1[i]:
+					
+    							dihedral_array[i][0] = 1
 
     a = 0
     ivalues_failed = []
@@ -352,10 +365,11 @@ for name in names:
     Jvalues_array = np.zeros((array_size, 1), dtype = np.float64)
     Jvalues_array2 = np.zeros((array_size, 1), dtype = np.float64)
     HLA_array = np.zeros((array_size, 5), dtype = np.float64)
-
+		
     #get atom labels for substituents and their relative orientations
     for i in range(array_size):
     	sub_array[i][4] = i
+	SP3 = 1
     #only look at pathways  that are HCCH
     	if dihedral_array[i][0] == 1:
 
@@ -364,6 +378,7 @@ for name in names:
     		if not len(bonds_1) == 1:
     			print("Hconnectivity_error")
     			ivalues_failed.append(i)
+			dihedral_array[i][0] = 2
     			continue
 
     		#check H is connected to C
@@ -388,7 +403,8 @@ for name in names:
     			#search each of the connections
 
     			for j in range (len(bonds_2)):
-
+				if SP3 == 0:
+					continue
     				if bonds_2[j] == dihedral_array[i][1]:
 
     					continue
@@ -402,8 +418,8 @@ for name in names:
     					#loop through each of the bonds that C is connected to
 
     					if not len(bonds_3) == 4:
-    						print("C2_notsp3", i)
-    						ivalues_failed.append(i)
+						print("c2_notsp3", i)
+    						SP3 = 0
     						continue
     					for x in range (len(bonds_3)):
 
@@ -452,13 +468,18 @@ for name in names:
     										else:
 
     											sub_array[i][3] = (bonds_3[x])
+									
 
-
+						if SP3 == 0:
+							sub_array[i][2] = 0	
+							sub_array[i][3] = 0
 
 
     				else:
 
-
+					if SP3 == 0:
+						continue
+						
     				#this is now for other bonds conncted to first carbon again
 
     					for Y in range (array_size):
@@ -496,11 +517,13 @@ for name in names:
     #now need to get electronegativity values for these substituents and the beta substituents
 
     for a in range(array_size):
+
     	if sub_array[a][0] == 0:
     		continue
     	bonds_4 = np.transpose(np.nonzero(connectivity_array[sub_array[a][0]]))
 
     	if len(bonds_4) != 4 and len(bonds_4) != 1:
+		print("Bsub_notSP3")
     		continue
     	Esub1B_1 = 0
 
@@ -523,6 +546,7 @@ for name in names:
 
     	if len(bonds_5) != 4 and len(bonds_5) != 1:
     		continue
+		print("Bsub_notSP3")
     	Esub2B_1 = 0
 
 
@@ -541,6 +565,7 @@ for name in names:
     		continue
     	bonds_6 = np.transpose(np.nonzero(connectivity_array[sub_array[a][2]]))
     	if len(bonds_6) != 4 and len(bonds_6) != 1:
+		print("Bsub_notSP3")
     		continue
     	Esub3B_1 = 0
 
@@ -559,6 +584,7 @@ for name in names:
     		continue
     	bonds_7 = np.transpose(np.nonzero(connectivity_array[sub_array[a][3]]))
     	if len(bonds_7) != 4 and len(bonds_7) != 1:
+		print("Bsub_notSP3")
     		continue
     	Esub4B_1 = 0
 
@@ -672,14 +698,14 @@ for name in names:
 
     length = 0
     for i in range(array_size):
-    	if dihedral_array[i][0] == 1:
+    	if dihedral_array[i][0] != 0:
     		length += 1
 
     HLA_final = np.zeros((length, 8), dtype=np.float64)
 
     a = 0
     for i in range(array_size):
-    	if dihedral_array[i][0] == 1:
+    	if dihedral_array[i][0] != 0:
     		HLA_final[a][0] = dihedral_array[i][0]
     		HLA_final[a][1] = dihedral_array[i][1]
     		HLA_final[a][2] = dihedral_array[i][2]
