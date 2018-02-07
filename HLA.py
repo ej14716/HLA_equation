@@ -720,7 +720,7 @@ for name in names:
 
     new_outfile = name + "_HLA.out"
 
-    with open(outfile, "w") as f:
+    with open(new_outfile, "w") as f:
 
     	for i in range(length):
     		string = "{0:<16.6f}, {1:<16.6f}, {2:<16.6f}, {3:<16.6f}, {4:<16.6f}, {5:<16.6f}, {6:<16.6f}, {7:<16.6f}, ".format(HLA_final[i][0], HLA_final[i][1], HLA_final[i][2], HLA_final[i][3], HLA_final[i][4],  HLA_final[i][5],  HLA_final[i][6],  HLA_final[i][7])
