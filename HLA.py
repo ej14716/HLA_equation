@@ -277,7 +277,7 @@ for name in names:
     y = 0
 
     x = 0
-
+    
     DFTJ_array = np.zeros((len(DFTJ), len(DFTJ)), dtype=np.float64)
     
     for line in DFTJ:
@@ -288,7 +288,7 @@ for name in names:
     		DFTJ_array[x][y] = item
     		y += 1
     	x += 1
-
+    	
 
     dihedral_array = np.zeros((array_size, 8), dtype = np.float64)
 
@@ -317,7 +317,7 @@ for name in names:
     		high = atom_4[i]
 
 
-    	dihedral_array[i][7] = DFTJ_array[int(high)][int(low)]
+    	dihedral_array[i][7] = DFTJ_array[int(high)][int(low)-1]
 
 
     	if atomic_number[atom_1[i]] == 1:
@@ -398,6 +398,7 @@ for name in names:
     			bonds_2 = np.transpose(np.nonzero(connectivity_array[dihedral_array[i][2]]))
     			if not len(bonds_2) == 4:
     				print("C1_notsp3", i )
+				dihedral_array[i][0] = 2
     				ivalues_failed.append(i)
     				continue
     			#search each of the connections
@@ -420,6 +421,7 @@ for name in names:
     					if not len(bonds_3) == 4:
 						print("c2_notsp3", i)
     						SP3 = 0
+						dihedral_array[i][0] = 2
     						continue
     					for x in range (len(bonds_3)):
 
@@ -524,6 +526,7 @@ for name in names:
 
     	if len(bonds_4) != 4 and len(bonds_4) != 1:
 		print("Bsub_notSP3")
+		dihedral_array[a][0] = 2
     		continue
     	Esub1B_1 = 0
 
@@ -547,6 +550,7 @@ for name in names:
     	if len(bonds_5) != 4 and len(bonds_5) != 1:
     		continue
 		print("Bsub_notSP3")
+		dihedral_array[i][0] = 2
     	Esub2B_1 = 0
 
 
@@ -566,6 +570,7 @@ for name in names:
     	bonds_6 = np.transpose(np.nonzero(connectivity_array[sub_array[a][2]]))
     	if len(bonds_6) != 4 and len(bonds_6) != 1:
 		print("Bsub_notSP3")
+		dihedral_array[i][0] = 2
     		continue
     	Esub3B_1 = 0
 
@@ -585,6 +590,7 @@ for name in names:
     	bonds_7 = np.transpose(np.nonzero(connectivity_array[sub_array[a][3]]))
     	if len(bonds_7) != 4 and len(bonds_7) != 1:
 		print("Bsub_notSP3")
+		dihedral_array[i][0] = 2
     		continue
     	Esub4B_1 = 0
 
