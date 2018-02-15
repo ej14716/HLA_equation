@@ -33,7 +33,7 @@ def is_number(s):
 
     return False
 
-raw_names = glob.glob("J_matrix/*_J_Raw.txt")
+raw_names = glob.glob("test/*_J_Raw.txt")
 names = []
 for items in raw_names:
 	item = items.split('/')
@@ -41,16 +41,16 @@ for items in raw_names:
 	names.append(it[0])
 
 for name in names:
-    string1 = "pass/*" + name + "_dangle.txt"
+    string1 = "test/" + name + "_dangle.txt"
     file1 = glob.glob(string1)
     file1 = file1[0]
-    string2 = "pass/*" + name + "_atno.txt"
+    string2 = "test/" + name + "_atno.txt"
     file2 = glob.glob(string2)
     file2 = file2[0]
-    string3 = "pass/*" + name + "_conn.txt"
+    string3 = "test/" + name + "_conn.txt"
     file3 = glob.glob(string3)
     file3 = file3[0]
-    string4 = "J_matrix/" + name + "_J_Raw.txt"
+    string4 = "test/" + name + "_J_Raw.txt"
     file4 = glob.glob(string4)
     file4 = file4[0]
 
@@ -404,7 +404,7 @@ for name in names:
     				ivalues_failed.append(i)
     				continue
     			#search each of the connections
-
+			
     			for j in range (len(bonds_2)):
 				if SP3 == 0:
 					continue
@@ -478,7 +478,7 @@ for name in names:
 							sub_array[i][2] = 0	
 							sub_array[i][3] = 0
 
-
+				
     				else:
 
 					if SP3 == 0:
@@ -517,43 +517,17 @@ for name in names:
 
     									sub_array[i][1] = (bonds_2[j])
 
-
+		if SP3 == 0:
+			continue
     #now need to get electronegativity values for these substituents and the beta substituents
-
+       
     for a in range(array_size):
-	if SP3 == 0:
+ 	if sub_array[a][0] == 0:
 		continue
+       
 
-    	if sub_array[a][0] == 0:
-    		continue
-    	bonds_4 = np.transpose(np.nonzero(connectivity_array[sub_array[a][0]]))
-	if atomic_number[sub_array[a][0]] == 1:
-		if len(bonds_4) != 1:
-			print("H_error")
-			continue
-	if atomic_number[sub_array[a][0]] == 6:
-    		if len(bonds_4) != 4:
-			dihedral_array[a][0] = 2
-		if len(bonds_4) != 2 and len(bonds_4) != 3 and len(bonds_4) != 4:
-			print("C_error")
-			continue
-	if atomic_number[sub_array[a][0]] == 7:
-		if len(bonds_4) == 3:
-			dihedral_array[a][0] = 3
-		elif len(bonds_4) == 2:
-			dihedral_array[a][0] = 4
-		else:
-			print("N_error")
-			continue
-	if atomic_number[sub_array[a][0]] == 8:
-		if len(bonds_4) == 2:	
-			dihedral_array[a][0] = 5
-		else:
-			print ("O_error")
-			continue
-	if atomic_number[sub_array[a][0]] != 1 and atomic_number[sub_array[a][0]] != 4 and atomic_number[sub_array[a][0]] != 7 and atomic_number[sub_array[a][0]] != 8:
-		dihedral_array[a][0] = 6
-
+	bonds_4 = np.transpose(np.nonzero(connectivity_array[sub_array[a][0]]))
+		
    	Esub1B_1 = 0
 
     	for z in range(len(bonds_4)):
@@ -571,34 +545,9 @@ for name in names:
 
     	if sub_array[a][1] == 0:
     		continue
+
     	bonds_5 = np.transpose(np.nonzero(connectivity_array[sub_array[a][1]]))
 
-        if atomic_number[sub_array[a][1]] == 1:
-                if len(bonds_5) != 1:
-                        print("H_error")
-                        continue
-        if atomic_number[sub_array[a][1]] == 6:
-                if len(bonds_5) != 4:
-                        dihedral_array[a][0] = 2
-                if len(bonds_5) != 2 and len(bonds_5) != 3 and len(bonds_5) != 4:
-                        print("C_error")
-                        continue
-        if atomic_number[sub_array[a][1]] == 7:
-                if len(bonds_5) == 3:
-               		dihedral_array[a][0] = 3
-                elif len(bonds_5) == 2:
-                        dihedral_array[a][0] = 4
-                else:
-                        print("N_error")
-                        continue
-        if atomic_number[sub_array[a][1]] == 8:
-                if len(bonds_5) == 2:
-                        dihedral_array[a][0] = 5
-                else:
-                        print ("O_error")
-                        continue
-        if atomic_number[sub_array[a][1]] != 1 and atomic_number[sub_array[a][1]] != 4 and atomic_number[sub_array[a][1]] != 7 and atomic_number[sub_array[a][1]] != 8:
-                dihedral_array[a][0] = 6
 
     	Esub2B_1 = 0
 
@@ -618,32 +567,6 @@ for name in names:
     	if sub_array[a][2] == 0:
     		continue
     	bonds_6 = np.transpose(np.nonzero(connectivity_array[sub_array[a][2]]))
-   	if atomic_number[sub_array[a][2]] == 1:
-                if len(bonds_6) != 1:
-                        print("H_error")
-                        continue
-        if atomic_number[sub_array[a][2]] == 6:
-                if len(bonds_6) != 4:
-                        dihedral_array[a][0] = 2
-                if len(bonds_6) != 2 and len(bonds_6) != 3 and len(bonds_6) != 4:
-                        print("C_error")
-                        continue
-        if atomic_number[sub_array[a][2]] == 7:
-                if len(bonds_6) == 3:
-               		dihedral_array[a][0] = 3
-                elif len(bonds_6) == 2:
-                        dihedral_array[a][0] = 4
-                else:
-                        print("N_error")
-                        continue
-        if atomic_number[sub_array[a][2]] == 8:
-                if len(bonds_6) == 2:
-                        dihedral_array[a][0] = 5
-                else:
-                        print ("O_error")
-                        continue
-        if atomic_number[sub_array[a][2]] != 1 and atomic_number[sub_array[a][2]] != 4 and atomic_number[sub_array[a][2]] != 7 and atomic_number[sub_array[2][0]] != 8:
-                dihedral_array[a][0] = 6
 	
     		
     	Esub3B_1 = 0
@@ -663,41 +586,12 @@ for name in names:
     		continue
 
     	bonds_7 = np.transpose(np.nonzero(connectivity_array[sub_array[a][3]]))
-    	if atomic_number[sub_array[a][3]] == 1:
-                if len(bonds_7) != 1:
-                        print("H_error")
-                        continue
-        if atomic_number[sub_array[a][3]] == 6:
-                if len(bonds_7) != 4:
-                        dihedral_array[a][0] = 2
-                if len(bonds_7) != 2 and len(bonds_7) != 3 and len(bonds_7) != 4:
-                        print("C_error")
-                        continue
-        if atomic_number[sub_array[a][3]] == 7:
-                if len(bonds_7) == 3:
-                	dihedral_array[a][0] = 3
-                elif len(bonds_7) == 2:
-                        dihedral_array[a][0] = 4
-                else:
-                        print("N_error")
-                        continue
-        if atomic_number[sub_array[a][3]] == 8:
-                if len(bonds_7) == 2:
-                        dihedral_array[a][0] = 5
-                else:
-                        print ("O_error")
-                        continue
-        if atomic_number[sub_array[a][3]] != 1 and atomic_number[sub_array[a][3]] != 4 and atomic_number[sub_array[a][3]] != 7 and atomic_number[sub_array[a][3]] != 8:
-                dihedral_array[a][0] = 6
+	    		
+	Esub4B_1 = 0
 
-    
-    	Esub4B_1 = 0
-
-    	for z in range(len(bonds_7)):
-
-    		if bonds_7[z] == dihedral_array[a][3]:
-
-    			continue
+	for z in range(len(bonds_7)):
+		if bonds_7[z] == dihedral_array[a][3]:
+			continue
 
     		else:
 
@@ -718,7 +612,7 @@ for name in names:
     	electronegativity_Barray[a][2] = Esub3B_1
 
     	electronegativity_Barray[a][3] = Esub4B_1
-
+    
 
     #electronegativity of the alpha substituents array
 
@@ -806,21 +700,23 @@ for name in names:
     	if dihedral_array[i][0] != 0:
     		length += 1
 
-    HLA_final = np.zeros((length, 9), dtype=np.string)
-
+    HLA_final = np.zeros((length, 9), dtype=np.float64)
+    name_list = []
     a = 0
     for i in range(array_size):
     	if dihedral_array[i][0] !=  0:
-    		HLA_final[a][0] = str(dihedral_array[i][0])
-    		HLA_final[a][1] = str(dihedral_array[i][1])
-    		HLA_final[a][2] = str(dihedral_array[i][2])
-    		HLA_final[a][3] = str(dihedral_array[i][3])
-    		HLA_final[a][4] = str(dihedral_array[i][4])
-    		HLA_final[a][5] = str(dihedral_array[i][5])
-    		HLA_final[a][6] = str(Jvalues_array2[i])
-    		HLA_final[a][7] = str(dihedral_array[i][7])
-		HLA_final[a][8] = name
-    		a +=1
+    		HLA_final[a][0] = dihedral_array[i][0]
+    		HLA_final[a][1] = dihedral_array[i][1]
+    		HLA_final[a][2] = dihedral_array[i][2]
+    		HLA_final[a][3] = dihedral_array[i][3]
+    		HLA_final[a][4] = dihedral_array[i][4]
+    		HLA_final[a][5] = dihedral_array[i][5]
+    		HLA_final[a][6] = Jvalues_array2[i]
+    		HLA_final[a][7] = dihedral_array[i][7]
+    		name_list.append(name)
+
+		a +=1
+  
 
     lengthwo7 = 0
     for i in range(array_size):
@@ -838,20 +734,22 @@ for name in names:
 		regression_array[a][5] = electronegativity_Aarray[i][2]
 		regression_array[a][6] = electronegativity_Barray[i][2]
 		regression_array[a][7] = electronegativity_Aarray[i][3]
-		regression_array[a][8] = electronegativity_Aarray[i][3]
+		regression_array[a][8] = electronegativity_Barray[i][3]
 		regression_array[a][9] = dihedral_array[i][7]
 		a += 1
-    outfile = "HLA.txt"
+    outfile = "BAPOCM10.txt"
 
     #new_outfile = name + "_HLA.out"
    # outfile = "regression_input.txt"
 
-    with open(outfile, "a") as f:
+    with open(outfile, "w") as f:
 
-    	for i in range(length):
-    		string = "{0:<16.6f}, {1:<16.6f}, {2:<16.6f}, {3:<16.6f}, {4:<16.6f}, {5:<16.6f}, {6:<16.6f}, {7:<16.6f}, {8:<16.6 ".format(HLA_final[i][0], HLA_final[i][1], HLA_final[i][2], HLA_final[i][3], HLA_final[i][4],  HLA_final[i][5],  HLA_final[i][6],  HLA_final[i][7])
+    	for i in range(lengthwo7):
 
-#		string = "{0:<16.6f}, {1:<16.6f}, {2:<16.6f}, {3:<16.6f}, {4:<16.6f}, {5:<16.6f}, {6:<16.6f}, {7:<16.6f}, {8:<16.6f}, {9:<16.6f}".format(regression_array[i][0], regression_array[i][1], regression_array[i][2], regression_array[i][3], regression_array[i][4],  regression_array[i][5],  regression_array[i][6], regression_array[i][7], regression_array[i][8], regression_array[i][9]) 
+  	#	string = "{0:<16.6f}, {1:<16.6f}, {2:<16.6f}, {3:<16.6f}, {4:<16.6f}, {5:<16.6f}, {6:<16.6f}, {7:<16.6f}, {8:<16s} ".format(HLA_final[i][0], HLA_final[i][1], HLA_final[i][2], HLA_final[i][3], HLA_final[i][4],  HLA_final[i][5],  HLA_final[i][6],  HLA_final[i][7], name_list[i])
+
+
+		string = "{0:<16.6f}, {1:<16.6f}, {2:<16.6f}, {3:<16.6f}, {4:<16.6f}, {5:<16.6f}, {6:<16.6f}, {7:<16.6f}, {8:<16.6f}, {9:<16.6f}".format(regression_array[i][0], regression_array[i][1], regression_array[i][2], regression_array[i][3], regression_array[i][4],  regression_array[i][5],  regression_array[i][6], regression_array[i][7], regression_array[i][8], regression_array[i][9]) 
     		print(string, file = f)
 
 
