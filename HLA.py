@@ -632,34 +632,37 @@ for name in names:
     A_array	= p7 * (electronegativity_Barray)
 
 
-
     B_array = electronegativity_Aarray - A_array
 
-
-
-
+   
 
     #do stuff with the positive and negtive substituents
+    C_1 = np.zeros((array_size, 4), dtype=np.float64) 
+    for i in range(array_size):
+
+	C_1[i][0] = p6 * np.absolute(B_array[i][0])
+	C_1[i][1] = p6 * np.absolute(B_array[i][1])
+    	C_1[i][2] = p6 * np.absolute(B_array[i][2])
+	C_1[i][3] = p6 * np.absolute(B_array[i][3])
 
 
     for i in range(array_size):
 
-    	C_array[i][0] = np.radians(dihedral_array[i][5]) + (p6 * (np.absolute(B_array[i][0])))
+    	C_array[i][0] = (dihedral_array[i][5]) + C_1[i][0]
 
-    	C_array[i][1] = np.negative(np.radians(dihedral_array[i][5])) + (p6 * (np.absolute(B_array[i][1])))
+    	C_array[i][1] = (-1*(dihedral_array[i][5])) + C_1[i][1]
 
-    	C_array[i][2] = np.radians(dihedral_array[i][5]) + (p6 * (np.absolute(B_array[i][2])))
+    	C_array[i][2] = (dihedral_array[i][5]) + C_1[i][2]
 
-    	C_array[i][3] = np.negative(np.radians(dihedral_array[i][5])) + (p6 * (np.absolute(B_array[i][3])))
-
-
+    	C_array[i][3] = (-1*(dihedral_array[i][5])) + C_1[i][3]
+    
     # make aray that needs to be * by the electronegativity (B array)
-
-    D_array = p4 + (p5 * np.square(np.cos(C_array)))
+    
+    D_array = p4 + (p5 * np.square(np.cos(np.radians(C_array))))
 
 
     E_array = D_array * B_array
-
+    
 
     for k in range(array_size):
     	sum = 0
@@ -667,18 +670,17 @@ for name in names:
     		sum = sum + E_array[k][l]
     	F_array[k] = sum
     #need to chck this is right..
-
+    print(F_array[166])
 
     for i in range(array_size):
 
     	cos_array[i][0]  = np.cos(np.radians(dihedral_array[i][5]))
 
     cossqr_array = np.square(cos_array)
-
+    
     Jvalues_array = np.add((p1*cossqr_array),(p2*cos_array))
 
     Jvalues_array2 = np.add(Jvalues_array, F_array)
-
 
 
     for i in range(array_size):
@@ -693,7 +695,7 @@ for name in names:
 
     	HLA_array[i][4] = dihedral_array[i][7]
 
-
+    print(HLA_array[166][3])
 
     length = 0
     for i in range(array_size):
@@ -717,7 +719,7 @@ for name in names:
 
 		a +=1
   
-
+  
     lengthwo7 = 0
     for i in range(array_size):
 	if dihedral_array[i][0] != 0 and dihedral_array[i][0] != 7:
@@ -737,22 +739,29 @@ for name in names:
 		regression_array[a][8] = electronegativity_Barray[i][3]
 		regression_array[a][9] = dihedral_array[i][7]
 		a += 1
-    outfile = "BAPOCM10.txt"
+
+    outfile_1 = "BAPOCM_test"
 
     #new_outfile = name + "_HLA.out"
-   # outfile = "regression_input.txt"
+ #   outfile = "regression_input.txt"
+#    outfile_1 = "HLA_final.txt"
+   # with open(outfile, "w") as f:
 
-    with open(outfile, "w") as f:
-
-    	for i in range(lengthwo7):
+ #   	for i in range(lengthwo7):
 
   	#	string = "{0:<16.6f}, {1:<16.6f}, {2:<16.6f}, {3:<16.6f}, {4:<16.6f}, {5:<16.6f}, {6:<16.6f}, {7:<16.6f}, {8:<16s} ".format(HLA_final[i][0], HLA_final[i][1], HLA_final[i][2], HLA_final[i][3], HLA_final[i][4],  HLA_final[i][5],  HLA_final[i][6],  HLA_final[i][7], name_list[i])
 
 
-		string = "{0:<16.6f}, {1:<16.6f}, {2:<16.6f}, {3:<16.6f}, {4:<16.6f}, {5:<16.6f}, {6:<16.6f}, {7:<16.6f}, {8:<16.6f}, {9:<16.6f}".format(regression_array[i][0], regression_array[i][1], regression_array[i][2], regression_array[i][3], regression_array[i][4],  regression_array[i][5],  regression_array[i][6], regression_array[i][7], regression_array[i][8], regression_array[i][9]) 
-    		print(string, file = f)
+	#	string = "{0:<16.6f}, {1:<16.6f}, {2:<16.6f}, {3:<16.6f}, {4:<16.6f}, {5:<16.6f}, {6:<16.6f}, {7:<16.6f}, {8:<16.6f}, {9:<16.6f}".format(regression_array[i][0], regression_array[i][1], regression_array[i][2], regression_array[i][3], regression_array[i][4],  regression_array[i][5],  regression_array[i][6], regression_array[i][7], regression_array[i][8], regression_array[i][9]) 
+#    		print(string, file = f)
 
+    with open(outfile_1, "a") as f1:
 
+	for i in range(length):
+
+ 	  	str = "{0:<16.6f}, {1:<16.6f}, {2:<16.6f}, {3:<16.6f}, {4:<16.6f}, {5:<16.6f}, {6:<16.6f}, {7:<16.6f}, {8:<16s} ".format(HLA_final[i][0], HLA_final[i][1], HLA_final[i][2], HLA_final[i][3], HLA_final[i][4],  HLA_final[i][5],  HLA_final[i][6],  HLA_final[i][7], name_list[i])
+
+		print(str, file = f1)
 
 
 
