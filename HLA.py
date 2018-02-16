@@ -33,7 +33,7 @@ def is_number(s):
 
     return False
 
-raw_names = glob.glob("test/*_J_Raw.txt")
+raw_names = glob.glob("J_matrix/*_J_Raw.txt")
 names = []
 for items in raw_names:
 	item = items.split('/')
@@ -41,16 +41,16 @@ for items in raw_names:
 	names.append(it[0])
 
 for name in names:
-    string1 = "test/" + name + "_dangle.txt"
+    string1 = "pass/" + name + "_dangle.txt"
     file1 = glob.glob(string1)
     file1 = file1[0]
-    string2 = "test/" + name + "_atno.txt"
+    string2 = "pass/" + name + "_atno.txt"
     file2 = glob.glob(string2)
     file2 = file2[0]
-    string3 = "test/" + name + "_conn.txt"
+    string3 = "pass/" + name + "_conn.txt"
     file3 = glob.glob(string3)
     file3 = file3[0]
-    string4 = "test/" + name + "_J_Raw.txt"
+    string4 = "J_matrix/" + name + "_J_Raw.txt"
     file4 = glob.glob(string4)
     file4 = file4[0]
 
@@ -669,8 +669,8 @@ for name in names:
     	for l in range(4):
     		sum = sum + E_array[k][l]
     	F_array[k] = sum
-    #need to chck this is right..
-    print(F_array[166])
+ 
+    
 
     for i in range(array_size):
 
@@ -695,7 +695,7 @@ for name in names:
 
     	HLA_array[i][4] = dihedral_array[i][7]
 
-    print(HLA_array[166][3])
+   
 
     length = 0
     for i in range(array_size):
@@ -740,20 +740,20 @@ for name in names:
 		regression_array[a][9] = dihedral_array[i][7]
 		a += 1
 
-    outfile_1 = "BAPOCM_test"
+    outfile_1 = "final_input"
 
     #new_outfile = name + "_HLA.out"
  #   outfile = "regression_input.txt"
-#    outfile_1 = "HLA_final.txt"
-   # with open(outfile, "w") as f:
+    outfile = "HLA_final.txt"
+    with open(outfile, "a") as f:
 
- #   	for i in range(lengthwo7):
+    	for i in range(lengthwo7):
 
-  	#	string = "{0:<16.6f}, {1:<16.6f}, {2:<16.6f}, {3:<16.6f}, {4:<16.6f}, {5:<16.6f}, {6:<16.6f}, {7:<16.6f}, {8:<16s} ".format(HLA_final[i][0], HLA_final[i][1], HLA_final[i][2], HLA_final[i][3], HLA_final[i][4],  HLA_final[i][5],  HLA_final[i][6],  HLA_final[i][7], name_list[i])
+  #		string = "{0:<16.6f}, {1:<16.6f}, {2:<16.6f}, {3:<16.6f}, {4:<16.6f}, {5:<16.6f}, {6:<16.6f}, {7:<16.6f}, {8:<16s} ".format(HLA_final[i][0], HLA_final[i][1], HLA_final[i][2], HLA_final[i][3], HLA_final[i][4],  HLA_final[i][5],  HLA_final[i][6],  HLA_final[i][7], name_list[i])
 
 
-	#	string = "{0:<16.6f}, {1:<16.6f}, {2:<16.6f}, {3:<16.6f}, {4:<16.6f}, {5:<16.6f}, {6:<16.6f}, {7:<16.6f}, {8:<16.6f}, {9:<16.6f}".format(regression_array[i][0], regression_array[i][1], regression_array[i][2], regression_array[i][3], regression_array[i][4],  regression_array[i][5],  regression_array[i][6], regression_array[i][7], regression_array[i][8], regression_array[i][9]) 
-#    		print(string, file = f)
+		string = "{0:<16.6f}, {1:<16.6f}, {2:<16.6f}, {3:<16.6f}, {4:<16.6f}, {5:<16.6f}, {6:<16.6f}, {7:<16.6f}, {8:<16.6f}, {9:<16.6f}".format(regression_array[i][0], regression_array[i][1], regression_array[i][2], regression_array[i][3], regression_array[i][4],  regression_array[i][5],  regression_array[i][6], regression_array[i][7], regression_array[i][8], regression_array[i][9]) 
+    		print(string, file = f)
 
     with open(outfile_1, "a") as f1:
 
